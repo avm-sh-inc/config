@@ -1,0 +1,19 @@
+telegram_bot:
+  - platform: polling
+    api_key: 1821413033:AAFaNZfvFLivkz0jwYXl1k0qrUnSFylV3i0
+    allowed_chat_ids:
+      - 682703602
+      - -1001502844999
+
+notify:
+  - platform: telegram
+    name: tg_me
+    chat_id: "682703602"
+
+  - platform: telegram
+    name: tg_main_chanel
+    chat_id: "-1001502844999"
+
+  - platform: telegram
+    name: tg_chanel_safety
+    chat_id: "-1001594866313"

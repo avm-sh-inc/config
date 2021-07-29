@@ -1,0 +1,147 @@
+- alias: Domofon incoming call notification
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: binary_sensor.domofon_incoming_call
+    to: 'on'
+  action:
+    service: notify.telegram
+    data_template:
+      message: Звонок в домофон {% if is_state('switch.domofon_automatically_open',
+        'on') or is_state('switch.domofon_automatically_open_once', 'on') %}(откроется
+        автоматически){% endif %}
+      data:
+        inline_keyboard:
+        - '{{ ''-'' if is_state(''switch.domofon_automatically_open'', ''on'') or
+          is_state(''switch.domofon_automatically_open_once'', ''on'') else ''Открыть:/domofon_open,
+          Отклонить:/domofon_reject'' }}'
+  id: 71261e6d73cf404696007d9a1d4b9f8b
+- alias: Telegram /domofon_open callback
+  initial_state: true
+  trigger:
+    platform: event
+    event_type: telegram_callback
+    event_data:
+      data: /domofon_open
+  action:
+  - service: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: '{{ ''Открываю...'' if is_state(''binary_sensor.domofon_incoming_call'',
+        ''on'') else ''Нет входящего звонка'' }}'
+  - service: esphome.domofon_accept_call
+  id: 0ee268ba68284816879bdbe3d1a21f87
+- alias: Telegram /domofon_reject callback
+  initial_state: true
+  trigger:
+    platform: event
+    event_type: telegram_callback
+    event_data:
+      data: /domofon_reject
+  action:
+  - service: telegram_bot.answer_callback_query
+    data_template:
+      callback_query_id: '{{ trigger.event.data.id }}'
+      message: '{{ ''Отклоняю...'' if is_state(''binary_sensor.domofon_incoming_call'',
+        ''on'') else ''Нет входящего звонка'' }}'
+  - service: esphome.domofon_reject_call
+  id: 32cb9198a91f465dab30596629dc702a
+- alias: Domofon opened by button notification
+  initial_state: true
+  trigger:
+    platform: state
+    entity_id: binary_sensor.domofon_button
+    to: 'on'
+  condition:
+  - condition: state
+    entity_id: binary_sensor.domofon_incoming_call
+    state: 'on'
+  action:
+    service: notify.telegram
+    data:
+      message: Домофон открыт кнопкой
+  id: 1f65845f07dd4471aed7b24159407f16
+- id: '1624820220836'
+  alias: Звонят в домофон
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.domofon_incoming_call
+    from: 'off'
+    to: 'on'
+    for: '1'
+  condition: []
+  action:
+  - device_id: d7edfa33151d1e6e15df65a6943b0f02
+    domain: mobile_app
+    type: notify
+    title: Домофон
+    message: Кто то звонит
+  mode: single
+- id: '1625248881489'
+  alias: Переключить телевизор на приставку
+  description: ''
+  trigger:
+  - platform: device
+    device_id: eb26748394034783fc1abdfd709915a3
+    domain: media_player
+    entity_id: media_player.playstation_4
+    type: turned_on
+  - platform: device
+    device_id: eb26748394034783fc1abdfd709915a3
+    domain: media_player
+    entity_id: media_player.playstation_4
+    type: playing
+  condition: []
+  action:
+    service: media_player.select_source
+    entity_id: media_player.tv_badroom
+    data:
+      source: hdmi1
+  mode: single
+- id: '1627412464421'
+  alias: Записать секс
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.recorden_cam_bed_room
+    from: 'off'
+    to: 'on'
+    id: record
+  condition:
+  - condition: state
+    entity_id: binary_sensor.recorden_cam_bed_room
+    state: 'on'
+  action:
+  - repeat:
+      while:
+      - condition: state
+        entity_id: binary_sensor.recorden_cam_bed_room
+        state: 'on'
+      sequence:
+      - service: camera.record
+        target:
+          device_id: 1a766a47f35da4318d65f8ecc442f0b7
+        data:
+          filename: /media/cams/sex_{{ now().strftime('%Y-%m-%d %H:%M:%S') }}.mp4
+          duration: 3
+  mode: single
+- id: '1627413102732'
+  alias: Новая автоматизация
+  description: ''
+  trigger:
+  - platform: state
+    entity_id: binary_sensor.recorden_cam_bed_room
+    from: 'off'
+    to: 'on'
+  action:
+  - repeat:
+      count: 30
+      sequence:
+      - service: camera.record
+        target:
+          device_id: 1a766a47f35da4318d65f8ecc442f0b7
+        data:
+          filename: /media/cams/sex_{{ now() }}.mp4
+      - delay: 400
+  mode: single

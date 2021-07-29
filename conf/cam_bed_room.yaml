@@ -1,0 +1,28 @@
+camera:
+  - platform: onvif
+    host: 192.168.1.157
+    username: admin
+    password: !secret cam_password_bed_room
+    name: "cam_bed_room"
+    port: 80
+
+binary_sensor:
+  - platform: template
+    sensors:
+      recorden_cam_bed_room:
+        friendly_name: "recording bedroom cam"
+        value_template: "off"
+
+# switch:
+#   - platform: template
+#     switches:
+#       record_cam_bed_room:
+#         value_template: "off"
+#         turn_on:
+#           service: .turn_on
+#           target:
+#             entity_id: switch.skylight_open
+#         turn_off:
+#           service: switch.turn_off
+#           target:
+#             entity_id: switch.skylight_close

@@ -1,0 +1,61 @@
+- id: '1625394264432'
+  name: Крайние лампы
+  entities:
+    light.led_1_2:
+      min_mireds: 153
+      max_mireds: 357
+      supported_color_modes:
+      - color_temp
+      - hs
+      - rgbw
+      color_mode: rgbw
+      brightness: 255
+      hs_color:
+      - 0
+      - 0
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      rgbw_color:
+      - 255
+      - 255
+      - 255
+      - 255
+      xy_color:
+      - 0.323
+      - 0.329
+      color_temp: 1
+      white_value: 255
+      friendly_name: LED_1
+      supported_features: 187
+      state: 'on'
+    light.led_4:
+      min_mireds: 153
+      max_mireds: 357
+      supported_color_modes:
+      - color_temp
+      - hs
+      - rgbw
+      color_mode: rgbw
+      brightness: 255
+      hs_color:
+      - 0
+      - 0
+      rgb_color:
+      - 255
+      - 255
+      - 255
+      rgbw_color:
+      - 255
+      - 255
+      - 255
+      - 255
+      xy_color:
+      - 0.323
+      - 0.329
+      color_temp: 1
+      white_value: 255
+      friendly_name: LED_4
+      supported_features: 187
+      state: 'on'

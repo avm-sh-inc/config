@@ -1,0 +1,55 @@
+# Configure a default setup of Home Assistant (frontend, api, etc)
+default_config:
+
+homeassistant:
+  name: "Hestia System Server"
+  allowlist_external_dirs:
+    - /media/cams/
+  packages: !include_dir_named conf
+  external_url: https://hass.sh-inc.ru
+  internal_url: http://192.168.1.3:8123
+
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 172.24.0.0
+    - 127.0.0.1
+    - 172.24.0.2
+    - 192.168.1.1
+
+# browser_mod
+browser_mod:
+  devices:
+    c0acd5ed-d07ba4b1:
+      name: hall_ipad
+      camera: true
+      force_stay_awake: true
+
+# front loveplace
+frontend:
+  themes: !include_dir_merge_named themes
+# Text to speech
+tts:
+  - platform: google_translate
+    cache: true
+    cache_dir: /tmp/tts
+    time_memory: 300
+    base_url: http://192.168.1.3:8123
+    service_name: google_say
+
+logger:
+  default: info
+
+stream:
+ffmpeg:
+
+# Example configuration.yaml entry
+switch:
+  - platform: wake_on_lan
+    mac: 192.168.1.153
+
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+

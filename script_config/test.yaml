@@ -1,0 +1,15 @@
+test_tv_volup:
+  alias: 'Test Vol UP'
+  sequence:
+    - service: webostv.button
+      data:
+        entity_id: media_player.tv_badroom
+        button: "VOLUMEUP"
+                
+test_tv_voldown:
+  alias: 'Test Vol DOWN'
+  sequence:
+    - service: webostv.button
+      data:
+        entity_id: media_player.tv_badroom
+        button: "VOLUMEDOWN"

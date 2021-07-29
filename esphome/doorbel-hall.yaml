@@ -1,0 +1,68 @@
+esphome:
+  name: doorbell_hall
+  platform: ESP32
+  board: esp-wrover-kit
+    
+wifi:
+  ssid: SmartHOME
+  password: "18935766"
+  ap:
+    ssid: camera_test
+    
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+
+ota:
+
+web_server:
+  port: "80"
+
+esp32_camera:
+  name: My Camera
+  external_clock:
+    pin: GPIO32
+    frequency: 20MHz
+  i2c_pins:
+    sda: GPIO13
+    scl: GPIO12
+  data_pins: [GPIO4, GPIO5, GPIO14, GPIO15, GPIO18, GPIO23, GPIO36, GPIO39]
+  vsync_pin: GPIO27
+  href_pin: GPIO25
+  pixel_clock_pin: GPIO19
+  power_down_pin: GPIO26
+  resolution: 640x480
+  jpeg_quality: 10
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+
+
+display:
+  - platform: ssd1306_i2c
+    model: "SSD1306 128x64"
+    address: 0x3C
+   
+sensor:
+  - platform: bme280
+    temperature:
+      name: "BME280 Temperature"
+      oversampling: 16x
+    pressure:
+      name: "BME280 Pressure"
+    humidity:
+      name: "BME280 Humidity"
+    address: 0x77
+    update_interval: 60s
+
+binary_sensor:
+  - platform: gpio
+    pin: GPIO33
+    name: "PIR Sensor"
+    device_class: motion
+
+
+

@@ -1,0 +1,28 @@
+# TV
+webostv:
+  host: 192.168.1.153
+  name: living_room_tv
+  turn_on_action:
+    service: wake_on_lan.send_magic_packet
+    data:
+      mac: !secret mac_tv
+
+  customize:
+    sources:
+      - livetv
+      - youtube
+      - hdmi1
+      - hdmi3
+      - hdmi4
+
+media_player:
+  - platform: webostv
+    host: 192.168.1.153
+    name: living_room_tv
+    device_class: tv
+    timeout: 5
+    filename: temp/webostv.config
+    turn_on_action:
+      - service: wake_on_lan.send_magic_packet
+        data:
+          mac: !secret mac_tv

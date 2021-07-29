@@ -1,0 +1,278 @@
+'1624711271101':
+  alias: ipda notify
+  sequence:
+  - device_id: eecbddd9e653800f64e19cdfea59a424
+    domain: mobile_app
+    type: notify
+    message: 'Тест '
+    title: Тест
+  mode: single
+test_tv_volup:
+  alias: Test Vol UP
+  sequence:
+  - service: webostv.button
+    data:
+      entity_id: media_player.tv_badroom
+      button: VOLUMEUP
+test_tv_voldown:
+  alias: Test Vol DOWN
+  sequence:
+  - service: webostv.button
+    data:
+      entity_id: media_player.tv_badroom
+      button: VOLUMEDOWN
+notifi:
+  alias: notifi
+  sequence:
+  - service: media_player.play_media
+    target:
+      entity_id: media_player.tv_badroom
+    data:
+      media_content_type: video
+      media_content_id: all
+  mode: single
+notification_tg_chanel:
+  sequence:
+  - service: notify.NOTIFIER_NAME
+    data:
+      title: '*Send a message*'
+      message: That's an example that _sends_ a *formatted* message with a custom
+        inline keyboard.
+      data:
+        inline_keyboard:
+        - Task 1:/command1, Task 2:/command2
+        - Task 3:/command3, Task 4:/command4
+  mode: single
+  alias: Notification TG Chanel
+1_4_lamp:
+  sequence:
+  - type: turn_on
+    device_id: 30e6b648c742fada72d53a6532499eca
+    entity_id: light.led_1_2
+    domain: light
+    brightness_pct: 100
+  - type: turn_on
+    device_id: a9627ccc3acb56a36a9c2059ffc38d79
+    entity_id: light.led_4
+    domain: light
+    brightness_pct: 100
+  mode: single
+  alias: 1_4 лампы
+test_popup:
+  sequence:
+  - service: browser_mod.call_service
+  mode: single
+  alias: browser_mod.test
+'1625423317098':
+  sequence:
+  - type: turn_off
+    device_id: 30e6b648c742fada72d53a6532499eca
+    entity_id: light.led_1_2
+    domain: light
+  - type: turn_off
+    device_id: 3bc04ebf01998e9a5048647c62de3c0f
+    entity_id: light.led_1
+    domain: light
+  - type: turn_off
+    device_id: 6368b317986539edb33900b14644ef73
+    entity_id: light.led_3
+    domain: light
+  - type: turn_off
+    device_id: a9627ccc3acb56a36a9c2059ffc38d79
+    entity_id: light.led_4
+    domain: light
+  - type: turn_off
+    device_id: 23ff5e67278f4f642be08d370574ac0c
+    entity_id: switch.cupboard
+    domain: switch
+  - type: turn_off
+    device_id: 2cc5ccdefd580652ac5eca18f18cf644
+    entity_id: light.lux
+    domain: light
+  - type: turn_off
+    device_id: 2cc5ccdefd580652ac5eca18f18cf644
+    entity_id: light.kontur
+    domain: light
+  mode: single
+  alias: Затемнить комнату
+'1625557967615':
+  alias: Выключить экран iPad
+  sequence:
+  - type: toggle
+    device_id: 5479b7882a29f9adbf110f8a2acc4a05
+    entity_id: light.bm_ipad
+    domain: light
+  mode: single
+doorbell:
+  sequence:
+  - service: script.turn_on
+    data:
+      entity_id:
+      - script.doorbell_audio
+      - script.doorbell_notifications
+      - script.doorbell_snapshot
+      - script.doorbell_lights
+doorbell_audio:
+  sequence:
+  - service: tts.google_say
+    data_template:
+      entity_id:
+      - media_player.living_room_speaker
+      - media_player.nuc_office
+      - media_player.dashboard_entryway
+      - media_player.peter_bedroom_display
+      - media_plauer.bathroom_speaker
+      - media_player.office_speaker
+      message: '"Someone is at the door."
+
+        '
+doorbell_notifications:
+  sequence:
+  - service: notify.notifier_name_pixel
+    data_template:
+      title: Ding dong!
+      message: Nokon ringde på døra.
+      data:
+        url: https://your_nabu_casa_url.ui.nabu.casa/lovelace/your_desired_lovelace_page
+        actions:
+        - action: open_door
+          title: Slepp inn
+doorbell_snapshot:
+  sequence:
+  - service: camera.snapshot
+    data:
+      entity_id: camera.doorbell_camera
+      filename: /config/www/cam_captures/doorbell/doorbell_{{ now ().year }}_{{ now
+        ().month }}_{{ now ().day }}_{{ now ().hour }}_{{ now ().minute }}.jpg
+  - data_template:
+      entity_id: camera.saved_image
+      file_path: /config/www/cam_captures/doorbell/doorbell_{{ now ().year }}_{{ now
+        ().month }}_{{ now ().day }}_{{ now ().hour }}_{{ now ().minute }}.jpg
+    service: camera.local_file_update_file_path
+doorbell_lights:
+  sequence:
+  - service: scene.create
+    data:
+      scene_id: before_doorbell
+      snapshot_entities:
+      - light.living_room_chill_lamp
+      - light.living_room_fridge_lamp
+      - light.living_room_ceiling_led_strip_wled
+      - light.living_room_kitchen_strip
+      - light.entrance_lamp
+      - light.bathroom_lamp
+      - light.bathroom_toilet_paper
+      - light.havard_bed
+      - light.peter_desk
+  - service: light.turn_on
+    data:
+      color_name: blue
+      entity_id:
+      - light.living_room_chill_lamp
+      - light.living_room_fridge_lamp
+      - light.living_room_ceiling_led_strip_wled
+      - light.living_room_kitchen_strip
+      - light.entrance_lamp
+      - light.bathroom_lamp
+      - light.bathroom_toilet_paper
+      - light.havard_bed
+      - light.peter_desk
+  - delay:
+      milliseconds: 500
+  - service: light.turn_off
+    data:
+      entity_id:
+      - light.living_room_chill_lamp
+      - light.living_room_fridge_lamp
+      - light.living_room_ceiling_led_strip_wled
+      - light.living_room_kitchen_strip
+      - light.entrance_lamp
+      - light.bathroom_lamp
+      - light.bathroom_toilet_paper
+      - light.havard_bed
+      - light.peter_desk
+  - delay:
+      milliseconds: 200
+  - service: light.turn_on
+    data:
+      color_name: blue
+      entity_id:
+      - light.living_room_chill_lamp
+      - light.living_room_fridge_lamp
+      - light.living_room_ceiling_led_strip_wled
+      - light.living_room_kitchen_strip
+      - light.entrance_lamp
+      - light.bathroom_lamp
+      - light.bathroom_toilet_paper
+      - light.havard_bed
+      - light.peter_desk
+  - delay:
+      milliseconds: 500
+  - service: scene.turn_on
+    data:
+      entity_id: scene.before_doorbell
+start_record:
+  alias: start_record
+  sequence:
+  - service: camera.record
+    target:
+      device_id: 1a766a47f35da4318d65f8ecc442f0b7
+    data:
+      filename: /media/cams/manual_{{ now().strftime('%H:%M:%S') }}.mp4
+      duration: 3
+  mode: single
+play_door_bell:
+  alias: DoorBellAlert
+  sequence:
+  - service: browser_mod.more_info
+    data:
+      entity_id: camera.camera_profile001
+      deviceID:
+      - hall_ipad
+  - service: media_player.play_media
+    data:
+      media_content_type: music
+      media_content_id: /local/sound/doorbell.mp3
+    target:
+      entity_id:
+      - media_player.8019f7ac_8a5c7199
+      - media_player.c0acd5ed_d07ba4b1
+  - service: notify.living_room_tv
+    data:
+      message: Кто то пришел
+      title: Дверной звонок
+  - service: notify.telegram
+    data:
+      message: Дверной звонок
+      title: Кто то пришел
+  - service: notify.notify
+    data:
+      message: Кто то пришел
+      title: Дверной звонок
+  mode: single
+  icon: hass:ring
+domofonalert:
+  alias: DomofonAlert
+  sequence:
+  - service: media_player.play_media
+    data:
+      media_content_type: music
+      media_content_id: /local/sound/domofon.mp3
+    target:
+      entity_id:
+      - media_player.8019f7ac_8a5c7199
+      - media_player.c0acd5ed_d07ba4b1
+  - service: notify.living_room_tv
+    data:
+      message: Кто то пришел
+      title: Домофон
+  - service: notify.telegram
+    data:
+      message: Кто то пришел
+      title: Домофон
+  - service: notify.notify
+    data:
+      message: Кто то пришел
+      title: Домофон
+  mode: single
+  icon: hass:ring

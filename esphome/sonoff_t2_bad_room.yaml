@@ -1,0 +1,66 @@
+esphome:
+  name: sonoff_t2_bad_room
+  platform: ESP8266
+  board: esp01_1m
+
+wifi:
+  ssid: ../!secret wifi_ssid
+  password: ../!secret wifi_password
+
+logger:
+
+api:
+
+ota:
+
+web_server:
+  port: "80"
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode: INPUT_PULLUP
+      inverted: True
+    id: button_1
+    on_press:
+      then:
+        - light.toggle: light_1
+
+  - platform: gpio
+    pin:
+      number: GPIO9
+      mode: INPUT_PULLUP
+      inverted: True
+    id: button_2
+    on_press:
+      then:
+        - light.toggle: light_2
+
+  - platform: status
+    name: "T2 Status"
+
+output:
+  - platform: gpio
+    pin: GPIO12
+    id: relay_1
+
+  - platform: gpio
+    pin: GPIO5
+    id: relay_2
+
+light:
+  - platform: binary
+    name: "Lux"
+    id: light_1
+    output: relay_1
+
+  - platform: binary
+    name: "Kontur"
+    id: light_2
+    output: relay_2
+
+status_led:
+  pin:
+    number: GPIO13
+    inverted: yes
